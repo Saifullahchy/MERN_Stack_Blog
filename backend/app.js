@@ -8,7 +8,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/api/users" , Router);
+app.use("/api/user" , Router);
 app.use("/api/blogs", blogRouter);
 
 mongoose

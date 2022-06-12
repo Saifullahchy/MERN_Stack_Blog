@@ -1,13 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import Blog from './Blog';
 
 const UserBlogs = () => {
   const [user, setUser] = useState();
   const id = localStorage.getItem("userId");
-  console.log(id)
+  
+
   const sendRequest = async () => {
     const res = await axios
-      .get(`http://localhost:8000/api/blogs/user/628d47bc7baa0a30bd406dcf`)
+      .get(`http://localhost:8000/api/blogs/user/${id}`)
       .catch((err) => console.log(err));
     const data = await res.data;
     return data;
@@ -18,7 +20,16 @@ const UserBlogs = () => {
   console.log(user);
 
   return (
-    <div>UserBlogs</div>
+    <div>
+       { user && user.blogs && user.blogs.map((blog,index) => (
+         <Blog 
+            key={index}
+            title={blog.title} 
+            description ={blog.description}  
+            imageUrl = {blog.image} 
+            userName = {user.name} />
+       ))}
+    </div>
   )
 }
 

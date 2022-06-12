@@ -7,49 +7,50 @@ import { useNavigate } from 'react-router-dom';
 import { authActions } from '../../store';
 
 const Auth = () => {
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const naviagte = useNavigate();
+  const dispath = useDispatch();
   const [inputs, setInputs] = useState({
-    name : "",
+    name: "",
     email: "",
-    password: ""
-  })
-
-  const handleChange  = (e) => {
-
-      setInputs((prevState) => ({
-        ...prevState,
-        [e.target.name] : e.target.value
-      }))
-  }
-
+    password: "",
+  });
+  const [isSignup, setIsSignup] = useState(false);
+  const handleChange = (e) => {
+    setInputs((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
   const sendRequest = async (type = "login") => {
-    const res = await axios.post(`http://localhost:8000/api/users/${type}`, {
-      name: inputs.name,
-      email: inputs.email,
-      password: inputs.password
-    }).catch(err => console.log(err))
+    const res = await axios
+      .post(`http://localhost:8000/api/user/${type}`, {
+        name: inputs.name,
+        email: inputs.email,
+        password: inputs.password,
+      })
+      .catch((err) => console.log(err));
 
     const data = await res.data;
+    console.log(data);
     return data;
-  }
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(inputs)
-    if(isSignup){
-      sendRequest("signup").then(()=> dispatch(authActions.login()))
-      .then(() => navigate('/blogs'))
-      .then(data => console.log(data))
+    e.preventDefault();
+    console.log(inputs);
+    if (isSignup) {
+      sendRequest("signup")
+        .then((data) => localStorage.setItem("userId", data.user._id))
+        .then(() => dispath(authActions.login()))
+        .then(() => naviagte("/blogs"));
+    } else {
+      sendRequest()
+        .then((data) => localStorage.setItem("userId", data.user._id))
+        .then(() => dispath(authActions.login()))
+        .then(() => naviagte("/blogs"));
     }
-    else{
-      sendRequest().then(()=> dispatch(authActions.login()))
-      .then(() => navigate('/blogs'))
-      .then(data => console.log(data));
-    }
-  }
-   const [isSignup, setIsSignUp] = useState(false);
+  };
+   
   return (
     <div>
 
@@ -90,7 +91,7 @@ const Auth = () => {
                   >Login</Button>
               <Button
                sx={{borderRadius: 3, marginTop: 1 }}
-               onClick={() => setIsSignUp(!isSignup)}>Move to { isSignup ? "Login" : "Signup"}</Button>
+               onClick={() => setIsSignup(!isSignup)}>Move to { isSignup ? "Login" : "Signup"}</Button>
         </Box>
       </form>
 

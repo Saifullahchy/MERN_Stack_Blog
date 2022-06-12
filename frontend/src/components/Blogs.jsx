@@ -27,7 +27,7 @@ const Blogs = () => {
          <Blog 
             title={blog.title} 
             description ={blog.description}  
-            imageUrl = {blog.imageUrl} 
+            imageUrl = {blog.image} 
             userName = {blog.user.name} />
        ))}
     </div>

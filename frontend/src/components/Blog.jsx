@@ -1,5 +1,5 @@
 import {
-    Avatar, Card, CardContent, CardHeader, CardMedia, Typography
+  Avatar, Card, CardContent, CardHeader, CardMedia, Typography
 } from '@mui/material';
 
 
@@ -7,6 +7,7 @@ const Blog = ({title, description, imageUrl, userName}) => {
    
   return (
     <div>
+         {" "}
          <Card sx={{ 
              width: "40%" , 
              margin: 'auto' , 
@@ -16,11 +17,12 @@ const Blog = ({title, description, imageUrl, userName}) => {
              ":hover":{
              boxShadow: "10px 10px 20px #ccc"
          }, 
+          mb:2
          }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor:"red" }} aria-label="recipe">
-            {userName}
+            {userName ? userName.charAt(0): ""}
           </Avatar>
         }
         
@@ -35,7 +37,7 @@ const Blog = ({title, description, imageUrl, userName}) => {
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {description}
+         <b> {userName} </b> : {description}
         </Typography>
       </CardContent>
     </Card>
