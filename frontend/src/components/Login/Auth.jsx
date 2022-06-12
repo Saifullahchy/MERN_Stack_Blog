@@ -1,8 +1,15 @@
 import { Button, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import axios from 'axios';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { authActions } from '../../store';
 
 const Auth = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [inputs, setInputs] = useState({
     name : "",
     email: "",
@@ -10,15 +17,37 @@ const Auth = () => {
   })
 
   const handleChange  = (e) => {
+
       setInputs((prevState) => ({
         ...prevState,
         [e.target.name] : e.target.value
       }))
   }
 
+  const sendRequest = async (type = "login") => {
+    const res = await axios.post(`http://localhost:8000/api/users/${type}`, {
+      name: inputs.name,
+      email: inputs.email,
+      password: inputs.password
+    }).catch(err => console.log(err))
+
+    const data = await res.data;
+    return data;
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log(inputs)
+    if(isSignup){
+      sendRequest("signup").then(()=> dispatch(authActions.login()))
+      .then(() => navigate('/blogs'))
+      .then(data => console.log(data))
+    }
+    else{
+      sendRequest().then(()=> dispatch(authActions.login()))
+      .then(() => navigate('/blogs'))
+      .then(data => console.log(data));
+    }
   }
    const [isSignup, setIsSignUp] = useState(false);
   return (
@@ -34,11 +63,12 @@ const Auth = () => {
             marginTop={5}
             borderRadius = {5}>
               <Typography variant='h3' padding={3} textAlign= 'center'>{ isSignup ? "Signup" : "Login"}</Typography>
-            { isSignup &&  <TextField name='name'
-                                      onChange={handleChange} 
-                                      value={inputs.name} 
-                                      margin='normal' 
-                                      placeholder='Name'/>}
+            { isSignup && 
+             <TextField name='name'
+                         onChange={handleChange} 
+                         value={inputs.name} 
+                         margin='normal' 
+                         placeholder='Name'/>}
               <TextField 
               name='email'
               onChange={handleChange} 
