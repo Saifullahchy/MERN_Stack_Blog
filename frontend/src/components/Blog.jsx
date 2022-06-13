@@ -1,10 +1,21 @@
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 import {
-  Avatar, Card, CardContent, CardHeader, CardMedia, Typography
+  Avatar, Box, Card, CardContent, CardHeader, CardMedia, IconButton, Typography
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
+const Blog = ({title, description, imageUrl, userName, isUser, id}) => {
+  
+  const navigate = useNavigate()
+  const handleEdit = (e) => {
+    navigate(`/myBlogs/${id}`)
+  }
 
-const Blog = ({title, description, imageUrl, userName}) => {
-   
+  const handleDelete = (e) => {
+
+  }
+  
   return (
     <div>
          {" "}
@@ -19,6 +30,17 @@ const Blog = ({title, description, imageUrl, userName}) => {
          }, 
           mb:2
          }}>
+        {
+          isUser && (
+            <Box
+                  display={'flex'}
+            >
+              <IconButton sx={{marginLeft:'auto'}} onClick={handleEdit}><EditIcon/></IconButton>
+              <IconButton onClick={handleDelete}><DeleteForeverIcon/></IconButton>
+            </Box>
+          )
+        }
+
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor:"red" }} aria-label="recipe">

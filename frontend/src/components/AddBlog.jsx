@@ -41,6 +41,7 @@ const AddBlog = () => {
     e.preventDefault();
     console.log(inputs)
     sendRequest().then((data) => console.log(data) )
+  
   }
 
   return (
